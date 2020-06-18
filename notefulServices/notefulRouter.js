@@ -3,7 +3,6 @@ const xss = require('xss')
 const path = require('path')
 const folderServices = require('./folderServices')
 const noteServices = require('./noteServices')
-const { json } = require('express')
 
 const notefulRouter = express.Router()
 const jsonParser = express.json()
