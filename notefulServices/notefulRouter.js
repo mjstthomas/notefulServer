@@ -30,6 +30,18 @@ notefulRouter
             folder_name: folderName
         }
         folderServices.insertFolder(req.app.get('db'), newFolder)
+        .then(result =>{
+            folderServices.getAllFolders(req.app.get('db'))
+                .then(folders =>{
+                    const cleanFolders = folders.map(folder =>{
+                        return {
+                            id: folder.id,
+                            folderName: xss(folder.folder_name)
+                        }
+                    })
+                    return res.json(cleanFolders)
+                })
+        })
         .catch(next)
     })
 

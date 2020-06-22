@@ -1,6 +1,7 @@
 const noteServices = require('../notefulServices/noteServices')
 const knex = require('knex')
 const { expect } = require('chai')
+const folderServices = require('../notefulServices/folderServices')
 
 describe('noteServices object', ()=>{
     let db
@@ -21,11 +22,24 @@ describe('noteServices object', ()=>{
         folderId: 2, 
         content: 'Occaecati dignissimos quam qui facere deserunt quia. Quaerat aut eos laudantium dolor odio officiis illum. Velit vel qui dolorem et.\n \rQui ut vel excepturi in at. Ut accusamus cumque quia sapiente ut ipsa nesciunt. Dolorum quod eligendi qui aliquid sint.\n \rAt id deserunt voluptatem et rerum. Voluptatem fuga tempora aut dignissimos est odio maiores illo. Fugiat in ad expedita voluptas voluptatum nihil.'}
     ]
-
+    const testFolders = [
+        {
+            id: 1,
+            folder_name: 'matt'
+        },
+        {
+            id: 2,
+            folder_name: 'brittany'
+        },
+        {
+            id: 3,
+            folder_name: 'emma'
+        }
+    ]
     before(()=>{
         db = knex({
             client: 'pg',
-            connection: process.env.DB_URL_TEST
+            connection: process.env.DATABASE_URL_TEST
         })
     })
 
@@ -45,6 +59,16 @@ describe('noteServices object', ()=>{
                 .then(result =>{
                     expect(result).to.eql(testNotes)
                 })
+        })
+    })
+    describe.only('gets all folders after post',()=> {
+        beforeEach(()=>{
+            return db 
+                .into('notes')
+                .insert(testFolders)
+        })
+        it('gets all folders after post',()=>{
+            return folderServices.insertFolder(db)
         })
     })
 })
