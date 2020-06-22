@@ -1,7 +1,6 @@
 const express = require('express')
 const xss = require('xss')
 const path = require('path')
-const cors = require('cors')
 const folderServices = require('./folderServices')
 const noteServices = require('./noteServices')
 
@@ -11,7 +10,7 @@ const jsonParser = express.json()
 
 notefulRouter
     .route('/api/folders')
-    .get(cors(), (req, res, next)=>{
+    .get((req, res, next)=>{
         folderServices.getAllFolders(req.app.get('db'))
             .then(folders =>{
                 const cleanFolders = folders.map(folder =>{
@@ -24,7 +23,7 @@ notefulRouter
             })
             .catch(next)
     })
-    .post(jsonParser, cors(), (req, res, next)=>{
+    .post(jsonParser, (req, res, next)=>{
         const {id, folderName} = req.body
         const newFolder = { 
             id: id,
@@ -48,7 +47,7 @@ notefulRouter
 
 notefulRouter
     .route('/api/folders/:folderId')
-    .delete(cors(), (req, res, next) =>{
+    .delete((req, res, next) =>{
         folderServices.deleteFolder(
             req.app.get('db'),
             req.params.folderId
@@ -62,7 +61,7 @@ notefulRouter
 
 notefulRouter
     .route('/api/notes')
-    .get(cors(), (req, res, next)=>{
+    .get((req, res, next)=>{
         noteServices.getAllNotes(req.app.get('db'))
         .then(notes =>{
             const cleanNotes = notes.map(note => {
@@ -78,7 +77,7 @@ notefulRouter
         })
         .catch(next)
     })
-    .post(jsonParser, cors(), (req, res, next)=>{
+    .post(jsonParser, (req, res, next)=>{
         console.log(req.body)
         const {folderid, content, noteName } = req.body
         const newNote = { 
@@ -92,7 +91,7 @@ notefulRouter
 
 notefulRouter
     .route('/api/notes/:noteId')
-    .delete(cors(), (req, res, next)=>{
+    .delete((req, res, next)=>{
         noteServices.deleteNote(
             req.app.get('db'),
             req.params.noteId
@@ -102,7 +101,7 @@ notefulRouter
         })
         .catch(next)
     })
-    .post(jsonParser, cors(), (req, res, next)=>{
+    .post(jsonParser, (req, res, next)=>{
         const {note_name, content} = req.body
         const updatedNote = {note_name, content}
 
